@@ -1,0 +1,342 @@
+<html>
+    <head>
+        <title>15</title>
+        <style>
+            .clearfix::after
+            {
+                content: "";
+                clear: both;
+                display: block;
+            }
+            .button-style
+            {
+                display: inline-block;
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+                margin-bottom: 10px;
+            }
+
+            .buttons
+            {
+                display: inline-block;
+                width: 180px;
+                height: 250px;
+            }
+
+            .calculator
+            {
+                display: inline-block;
+                margin: auto;
+                border: 1px black solid;
+                width: 90%;
+                height: 90%;
+            }
+
+            .functions
+            {
+                display: inline-block;
+                width: 150px;
+            }
+
+            .arithmop
+            {
+                display: inline-block;
+                width: 150px;
+            }
+        </style>
+        <script type="text/javascript">
+			var firstvalue = null;
+			var znak = "";
+			var error = false;
+            function AddNumb(numb)
+            {
+				if (error)
+				{
+					document.getElementById("inf").value = "0";
+					error = false;
+				}
+				
+				if (numb == ".")
+					if (document.getElementById("inf").value.indexOf(".") != -1)
+						return;
+				
+				if (document.getElementById("inf").value[0] == "0" && document.getElementById("inf").value.length == 1)
+				{
+					if (numb == ".")
+						document.getElementById("inf").value += numb;
+					else
+						document.getElementById("inf").value = numb;
+				}
+				else
+					document.getElementById("inf").value += numb;
+            }
+
+            function ClearAll()
+            {             
+				var span1 = document.getElementById("showed");
+				var span2 = document.getElementById("oper");
+                var input1 = document.getElementById("inf");
+                input1.value = "0";
+				firstvalue = null;
+				span1.innerHTML = "";
+				span2.innerHTML = "";
+				znak = "";
+            }
+
+            function ClearLast(elem)
+            {             
+				if (error)
+				{
+					document.getElementById("inf").value = "0";
+					error = false;
+				}
+                var input1 = elem.parentNode.getElementsByTagName("input")[1];
+				if (input1.value.length == 2 && input1.value[0] == "-")
+					input1.value = "0";
+                if (input1.value.length == 1)
+                    input1.value = "0";
+                else
+                    input1.value = input1.value.substr(0, input1.value.length - 1);//input1.value[input1.value.length - 2];
+            }
+			
+			function ChangeZnak()
+			{
+				var input1 = document.getElementById("inf");
+				if (input1.value[0] != "0" || input1.value.length > 2)
+					if (input1.value[0] == "-")
+					{
+						input1.value = input1.value.substr(1, input1.value.length - 1);
+					}
+					else
+					{
+						input1.value = "-" + input1.value;
+					}
+			}
+			
+			function TypeOperation(Oper)
+			{
+				var span1 = document.getElementById("showed");
+				var span2 = document.getElementById("oper");
+				var input1 = document.getElementById("inf");
+				if (error)
+				{
+					document.getElementById("inf").value = "0";
+					error = false;
+				}
+				if (firstvalue == null)
+				{
+					if (input1.value.length == 2)
+						if (input1.value == "0.")
+							input1.value = 0;
+					
+					span1.innerHTML = input1.value;
+					input1.value = "0";
+					span2.innerHTML = Oper;
+					firstvalue = span1.innerHTML;
+					znak = Oper;
+				}
+				else
+				{
+					span2.innerHTML = Oper;
+					znak = Oper;
+				}
+			}
+			
+			function Result()
+			{
+				var span1 = document.getElementById("showed");
+				var span2 = document.getElementById("oper");
+				var input1 = document.getElementById("inf");
+				if (error)
+				{
+					document.getElementById("inf").value = "0";
+					error = false;
+				}
+				if (input1.value.length == 2)
+					if (input1.value == "0.")
+						input1.value = 0;
+
+				if (firstvalue != null)
+				{
+					var res = 0;
+					var number1 = parseFloat(firstvalue);
+					var number2 = parseFloat(input1.value);
+					switch(znak)
+					{
+						case "+":
+							res = number1 + number2;
+							break;
+						case "-":
+							res = number1 - number2;
+							break;
+						case "*":
+							res = number1 * number2;
+							break;
+						case "/":
+
+							if (number2 == 0)
+							{
+								input1.value = "На ноль делить нельзя!";
+								error = true;
+								znak = "";
+								return;
+							}
+							res = number1 / number2;
+							break;
+					}
+					ClearAll();
+					input1.value = res;
+				}
+				znak = "";
+			}
+			
+			function ResultMath(RM)
+			{
+				var span1 = document.getElementById("showed");
+				var span2 = document.getElementById("oper");
+				var input1 = document.getElementById("inf");
+				var res = 0;
+				if (error)
+				{
+					document.getElementById("inf").value = "0";
+					error = false;
+				}
+				if (input1.value.length == 2)
+					if (input1.value == "0.")
+						input1.value = 0;
+							
+				if (firstvalue != null)
+				{
+					var number1 = parseFloat(firstvalue);
+					var number2 = parseFloat(input1.value);
+
+					switch(znak)
+					{
+						case "+":
+							res = number1 + number2;
+							break;
+						case "-":
+							res = number1 - number2;
+							break;
+						case "*":
+							res = number1 * number2;
+							break;
+						case "/":
+							if (number2 == 0)
+							{
+								input1.value = "На ноль делить нельзя!";
+								error = true;
+								znak = "";
+								return;
+							}
+							res = number1 / number2;
+                            if (number2 == 0)
+							{
+								input1.value = "На ноль делить нельзя!";
+								error = true;
+								znak = "";
+								return;
+							}
+							break;
+					}
+					ClearAll();
+					input1.value = res;
+				}
+				else
+				{
+					res = parseFloat(input1.value);
+				}
+
+
+				switch(RM)
+				{
+					case "1":
+						input1.value = Math.sin(res);
+						break;
+					case "2":
+						input1.value = Math.cos(res);
+						break;
+					case "3":
+						input1.value = Math.log(res);
+						break;
+					case "4":
+						input1.value = Math.sqrt(res);
+						break;
+					case "5":
+                         if (input1.value == 0)
+							{
+								input1.value = "На ноль делить нельзя!";
+								error = true;
+								znak = "";
+								return;
+							}
+						input1.value = 1 / res;
+						break;
+					case "6":
+						input1.value = Math.pow(res, 2);
+						break;
+					case "7":
+						input1.value = Math.pow(Math.E, res);
+						break;
+					case "8":
+						input1.value = Math.pow(10, res);
+						break;
+				}
+				
+				znak = "";
+			}
+        </script>
+    </head>
+    <body style="background-color: Green; color: black; text-align: center">
+        <div class="clearfix" style="margin: auto; width: 50%;">
+            <div class="calculator">
+                <h1>Calculator</h1>
+                <div>
+					<div>
+						<span id = "showed"></span>
+						<span id = "oper"></span>
+					</div>
+					<div>
+						<input type="button" value="C" class="button-style" onclick="ClearAll()">
+						<input value="0" type="text" id = "inf" name="inputfield" disabled style="font-size: 20px; margin-bottom: 30px; width: 400px;">
+						<input type="button" value="<" class="button-style" onclick="ClearLast(this)">
+					</div>
+			   </div>
+                <div class="inputs">
+                    <div class="functions">
+                    <input type="button" value="sin" class="button-style" onclick="ResultMath('1')">
+                    <input type="button" value="cos" class="button-style" onclick="ResultMath('2')">
+                    <input type="button" value="ln" class="button-style" onclick="ResultMath('3')">
+                    <input type="button" value="√x" class="button-style" onclick="ResultMath('4')">
+                    <input type="button" value="1/x" class="button-style" onclick="ResultMath('5')">
+                    <input type="button" value="x^2" class="button-style" onclick="ResultMath('6')">
+                    <input type="button" value="e^x" class="button-style" onclick="ResultMath('7')">
+                    <input type="button" value="10^x" class="button-style" onclick="ResultMath('8')">
+                </div>
+                <div class="buttons">
+                    <input type="button" value="1" class="button-style" onclick="AddNumb(1)">
+                    <input type="button" value="2" class="button-style" onclick="AddNumb(2)">
+                    <input type="button" value="3" class="button-style" onclick="AddNumb(3)">
+                    <input type="button" value="4" class="button-style" onclick="AddNumb(4)">
+                    <input type="button" value="5" class="button-style" onclick="AddNumb(5)">
+                    <input type="button" value="6" class="button-style" onclick="AddNumb(6)">
+                    <input type="button" value="7" class="button-style" onclick="AddNumb(7)">
+                    <input type="button" value="8" class="button-style" onclick="AddNumb(8)">
+                    <input type="button" value="9" class="button-style" onclick="AddNumb(9)">
+                    <input type="button" value="0" class="button-style" style="width: 105px;" onclick="AddNumb(0)">
+                    <input type="button" value="." class="button-style" onclick="AddNumb('.')">
+                </div>
+                <div class="arithmop">
+                    <input type="button" value="+" class="button-style" onclick="TypeOperation('+')">
+                    <input type="button" value="-" class="button-style" onclick="TypeOperation('-')">
+                    <input type="button" value="*" class="button-style" onclick="TypeOperation('*')">
+                    <input type="button" value="/" class="button-style" onclick="TypeOperation('/')">
+					<input type="button" value="-+" class="button-style" onclick="ChangeZnak()">
+					<input type="button" value="=" class="button-style" style="width: 105px;" onclick="Result()">
+                </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
